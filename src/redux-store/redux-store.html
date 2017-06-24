@@ -1,0 +1,59 @@
+<link rel="import" href="../../bower_components/polymer-redux/polymer-redux.html">
+
+<script>
+  const initialState = {
+    loading  : false,
+    friends  : [ 'Jane', 'John', 'Jimmy', 'Brenda' ],
+    username : ""
+  };
+
+  const reducer = ( state, action ) => {
+   
+    switch( action.type ) {
+      case "ADD_FRIEND" :
+        const friends = state.friends.slice( 0 );
+        friends.push( action.friend );
+        return Object.assign( { }, state, { friends : friends } );
+
+      case "SIGN_UP_STARTED" :
+        return Object.assign( { }, state, { 
+          loading  : true,
+          username : null
+        } );
+
+      case "SIGN_UP_COMPLETED" :
+        return Object.assign( { }, state, { 
+          loading  : false,
+          username : action.username
+        } );
+
+      default : 
+        return initialState;
+    }
+  };
+
+  const store      = Redux.createStore( 
+    reducer,
+    Redux.applyMiddleware( ReduxThunk.default ) 
+  );
+  
+  const ReduxMixin = PolymerRedux( store );
+
+  const AsyncActionsMixin = Parent => class AsyncActionsMixin extends ReduxMixin( Parent ) {
+    static get actions( ) {
+      return {
+        signupWithTimeout : ( username ) => {
+          return ( dispatch ) => {
+            dispatch( { type : 'SIGN_UP_STARTED'} );
+
+            setTimeout( ( ) => {
+              dispatch( { type : 'SIGN_UP_COMPLETED', username : username } );
+              dispatch( { type : 'ADD_FRIEND', friend : username } );
+            }, 3000 );
+          };
+        }
+      }
+    }
+  };
+
+</script>

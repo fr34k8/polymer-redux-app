@@ -1,0 +1,51 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="shared-styles.html">
+<link rel="import" href="./redux-store/redux-store.html">
+<link rel="import" href="./friends/friend-input.html">
+<link rel="import" href="./friends/friend-list.html">
+
+<dom-module id="my-view1">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+
+        padding: 10px;
+      }
+    </style>
+
+    <div class="card">
+      <div class="circle">[[friendCount]]</div>
+      <p>You have [[friendCount]] friends!</p>
+      <friend-input></friend-input>
+      <friend-list></friend-list>
+    </div>
+  </template>
+
+  <script>
+    class MyView1 extends ReduxMixin( Polymer.Element ) {
+      static get is( ) { return 'my-view1'; }
+
+      static get properties( ) {
+        return {
+          friends     : {
+            type      : Array,
+            statePath : 'friends' //polymer-redux association to state
+          },
+
+          friendCount : {
+            type      : Number,
+            computed  : '_computeFriendCount(friends)',
+            value     : 0
+          }
+        }
+      }
+
+      _computeFriendCount( friends ) {
+        return friends.length || 0;
+      }
+    }
+
+    window.customElements.define( MyView1.is, MyView1 );
+  </script>
+</dom-module>

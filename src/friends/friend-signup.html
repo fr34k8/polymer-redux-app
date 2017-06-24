@@ -1,0 +1,52 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../redux-store/redux-store.html">
+
+<dom-module id="friend-signup">
+  <template>
+    <label for="">
+      Username:
+      <input type="text" id="user">
+    </label>
+    <button
+      on-click="signup">
+      Signup
+    </button>
+
+    <template is="dom-if" if="[[loading]]">
+      loading...
+    </template>
+
+    <template is="dom-if" if="[[username]]">
+      Hello, [[username]]!
+    </template>
+  </template>
+
+  <script>
+    class FriendSignup extends AsyncActionsMixin( Polymer.Element ) {
+      static get is( ) { return 'friend-signup'; }
+
+      static get properties( ) {
+        return { 
+          loading     : {
+            type      : Boolean,
+            statePath : 'loading'
+          },
+
+          username    : {
+            type      : String,
+            statePath : 'username'
+          }
+        }
+      }
+
+      signup( ) {
+        let username = this.$.user.value;
+        console.log( username );
+        this.dispatch( 'signupWithTimeout', username );
+      }
+
+    }
+
+    window.customElements.define( FriendSignup.is, FriendSignup );
+  </script>
+</dom-module>
