@@ -15,11 +15,10 @@
     </style>
 
     <div class="card">
-      <div class="circle">[[friendCount]]</div>
-      <p>You have [[friendCount]] friends!</p>
-      <friend-input></friend-input>
-      <friend-list></friend-list>
+      <friend-input></friend-input>     
     </div>
+
+    <friend-list></friend-list>
   </template>
 
   <script>
@@ -31,18 +30,8 @@
           friends     : {
             type      : Array,
             statePath : 'friends' //polymer-redux association to state
-          },
-
-          friendCount : {
-            type      : Number,
-            computed  : '_computeFriendCount(friends)',
-            value     : 0
           }
         }
-      }
-
-      _computeFriendCount( friends ) {
-        return friends.length || 0;
       }
     }
 

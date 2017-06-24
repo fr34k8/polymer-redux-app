@@ -1,10 +1,17 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../redux-store/redux-store.html">
 
 <dom-module id="friend-input">
   <template>
-    <input type="text" id="field" />
-    <button on-click="addFriend">Add Friend</button>
+    <paper-input 
+      id="name"
+      label="Enter your friends name">
+    </paper-input>
+
+    <paper-button 
+      on-click="addFriend">Add Friend</paper-button>
   </template>
 
   <script>
@@ -27,12 +34,13 @@
       }
 
       addFriend( ) {
-        const field = this.$.field;
+        const name  = this.$.name,
+              image = this.$.image;
 
-        if( field.value ) {
-          this.dispatch( 'add', field.value );
-          field.value = null;
-          field.focus( );
+        if( name.value ) {
+          this.dispatch( 'add', { name : name.value, image : "http://www.rceno.com/RCENO/wp-content/uploads/2013/09/NoImageAvailable.jpg" } );
+          name.value  = null;
+          name.focus( );
         }
       }
 

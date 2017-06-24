@@ -3,7 +3,7 @@
 <script>
   const initialState = {
     loading  : false,
-    friends  : [ 'Jane', 'John', 'Jimmy', 'Brenda' ],
+    friends  : [ ],
     username : ""
   };
 
@@ -13,6 +13,7 @@
       case "ADD_FRIEND" :
         const friends = state.friends.slice( 0 );
         friends.push( action.friend );
+        console.log( friends );
         return Object.assign( { }, state, { friends : friends } );
 
       case "SIGN_UP_STARTED" :
@@ -42,14 +43,23 @@
   const AsyncActionsMixin = Parent => class AsyncActionsMixin extends ReduxMixin( Parent ) {
     static get actions( ) {
       return {
-        signupWithTimeout : ( username ) => {
+        signupWithTimeout : ( ) => {
           return ( dispatch ) => {
             dispatch( { type : 'SIGN_UP_STARTED'} );
 
-            setTimeout( ( ) => {
+            fetch( 'https://randomuser.me/api/?results=1', {
+              method : 'GET',
+            } ).then( ( res ) => {
+              return res.json( );
+            } ).then( ( json ) => {
+              let username = json.results[0].name.first;
               dispatch( { type : 'SIGN_UP_COMPLETED', username : username } );
-              dispatch( { type : 'ADD_FRIEND', friend : username } );
-            }, 3000 );
+              dispatch( { type : 'ADD_FRIEND', friend : {
+                name  : username,
+                image : json.results[0].picture.thumbnail
+              } } );
+            } );
+
           };
         }
       }

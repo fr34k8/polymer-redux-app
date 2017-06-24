@@ -1,13 +1,37 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../shared-styles.html">
 <link rel="import" href="../redux-store/redux-store.html">
 
 <dom-module id="friend-list">
   <template>
-    <ul>
-      <template is="dom-repeat" items="[[friends]]">
-        <li>[[item]]</li>
-      </template>
-    </ul>  
+    <style include="shared-styles">
+      img {
+        width: 55px;
+        height: 55px;
+        border-radius : 50%;
+        margin-right: 1em;
+      }
+
+      .flex-horizontal {
+        @apply(--layout-horizontal);
+      }
+      
+      .flexchild {
+        @apply(--layout-flex);
+      }
+    </style>
+    <div class="card">
+      <h3>You currently have [[friendCount]] friends!</h3>
+      <iron-list>
+        <template is="dom-repeat" items="[[friends]]" as="friend">
+          <div class="container flex-horizontal">
+          <img src="[[friend.image]]" alt="">
+          <h1 class="flexchild">[[friend.name]]</h1>
+          </div>          
+        </template>
+      </iron-list>
+    </div>
   </template>
 
   <script>
@@ -19,8 +43,18 @@
           friends : {
             type  : Array,
             statePath : 'friends'
+          },
+
+          friendCount : {
+            type      : Number,
+            computed  : '_computeFriendCount(friends)',
+            value     : 0
           }
         }
+      }
+
+      _computeFriendCount( friends ) {
+        return friends.length || 0;
       }
     }
 

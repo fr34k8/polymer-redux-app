@@ -10,6 +10,7 @@
     "lint": "npm run lint:javascript",
     "lint:javascript": "eslint . --ext js,html --ignore-path .gitignore",
     "test": "polymer test",
+    "doit" : "yarn install & bower install", 
     "test:integration": "polymer build # test that psk builds without error with the CLI"
   },
   "dependencies": {

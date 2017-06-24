@@ -1,6 +1,17 @@
+##### About
+Sample application showcasing redux and polymer 2.0.
+
+there are 3 routes which share a redux store containing a friends list, a username and a loading state. 
+
+View 1 provides an input field to quickly add a name to the friends list and displays the list of friends.
+
+View 2 displays only the list of friends
+
+View 3 is using an action register from the redux store to simulate an async use case.  When adding a username, the state.loading will be set to true for 3 seconds, after which time the state.username will get updated and pushed to the friends list, which will be updated in the other Views.
+
 ##### Get Started
 
-    Once project is cloned, simply run 'bower install' and 'yarn install' or 'npm install' to get the application up and running.
+Once project is cloned, simply run 'npm run doit' to get the application up and running.
 
 ### Start the development server
 
