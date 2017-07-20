@@ -1,24 +1,87 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="./redux-store/redux-store.html">
-<link rel="import" href="./friends/friend-input.html">
 <link rel="import" href="./friends/friend-list.html">
+<link rel="import" href="./friends/friend-signup.html">
 
 <dom-module id="my-view1">
   <template>
     <style include="shared-styles">
       :host {
         display: block;
+      }
 
-        padding: 10px;
+      paper-tabs {
+        --paper-tabs-selection-bar-color: var(--pri-color);
+      }
+
+      paper-tab {
+        --paper-tab-ink : var(--pri-color);
+      }
+
+      iron-pages {
+        padding: .5em;
       }
     </style>
 
-    <div class="card">
-      <friend-input></friend-input>     
-    </div>
+    <div class="container flex-horizontal">
+      <div id="content" class="content flexchild">
+        
+        <!-- Fetch an array of users to be shown in the grid -->
+        <iron-ajax auto url="https://demo.vaadin.com/demo-data/1.0/people?count=200" handle-as="json" last-response="{{users}}"></iron-ajax>
 
-    <friend-list></friend-list>
+        <!-- The array is set as the <vaadin-grid>'s "items" property -->
+        <vaadin-grid id="grid" aria-label="Basic Binding Example" items="[[friends]]">
+
+          <vaadin-grid-column width="50px" flex-grow="0">
+            <template class="header">#</template>
+            <template>[[index]]</template>
+            <!-- If necessary, the footer could be set using <template class="footer"> -->
+          </vaadin-grid-column>
+
+          <vaadin-grid-column>
+            <template class="header">First Name</template>
+            <template>[[item.name]]</template>
+          </vaadin-grid-column>
+
+          <!--<vaadin-grid-column>
+            <template class="header">Last Name</template>
+            <template>[[item.lastName]]</template>
+          </vaadin-grid-column>
+
+          <vaadin-grid-column width="150px">
+            <template class="header">Address</template>
+            <template>
+              <p style="white-space: normal">[[item.address.street]], [[item.address.city]]</p>
+            </template>
+          </vaadin-grid-column>-->
+
+        </vaadin-grid>
+
+      </div>
+      
+      <div id="smartpanel">
+        <paper-tabs selected="{{selected}}">
+          <paper-tab>Tab 1</paper-tab>
+          <paper-tab>Tab 2</paper-tab>
+          <paper-tab>Tab 3</paper-tab>
+        </paper-tabs>
+
+        <iron-pages selected="{{selected}}">
+          <div>
+            <friend-signup></friend-signup>
+            <friend-list></friend-list>
+          </div>
+          <div>
+            <friend-list></friend-list>
+          </div>
+          <div>
+            <friend-list></friend-list>
+          </div>
+        </iron-pages>
+      </div>
+    </div>
   </template>
 
   <script>
@@ -32,6 +95,24 @@
             statePath : 'friends' //polymer-redux association to state
           }
         }
+      }
+
+      ready( ) {
+        super.ready( );   
+        this.selected = 0;
+        window.addEventListener( 'resize', ( ) => {
+          this._sizeContent( );
+        } );
+      }
+
+      connectedCallback( ) {
+        super.connectedCallback( );
+        this._sizeContent( );
+      }
+
+      _sizeContent( ) {
+        this.$.smartpanel.style.height = ( window.innerHeight - 64 ) + "px";
+        this.$.grid.style.height       = ( window.innerHeight - 64 ) + "px";
       }
     }
 

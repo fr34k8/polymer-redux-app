@@ -9,36 +9,48 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-styles/shadow.html">
 
 <!-- shared styles for all views -->
 <dom-module id="shared-styles">
   <template>
     <style>
-      .card {
-        margin: 24px;
-        padding: 16px;
-        color: #757575;
-        border-radius: 5px;
-        background-color: #fff;
-        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+      :host {
+        --pri-color : #001f52;
+        --secondary-color : #0D82B7;
       }
 
-      .circle {
-        display: inline-block;
-        width: 64px;
-        height: 64px;
-        text-align: center;
-        color: #555;
-        border-radius: 50%;
-        background: #ddd;
-        font-size: 30px;
-        line-height: 64px;
+      .flex-horizontal {
+        @apply --layout-horizontal;
       }
 
-      h1 {
-        margin: 16px 0;
-        color: #212121;
-        font-size: 22px;
+      .flexchild {
+        @apply --layout-flex;
+      }
+
+      #content {
+        background-color: white;
+        @apply --shadow-elevation-3dp;
+      }
+
+      #smartpanel {
+        width: 35%;
+        background-color: #E9E9E9;
+        overflow: auto;
+      }
+
+      #toggleSmartPanel {
+        display: none;
+      }
+
+      @media (max-width: 900px) {
+        #smartpanel {
+          display: none;
+        }
+       
+        #toggleSmartPanel {
+          display: block;
+        }
       }
     </style>
   </template>

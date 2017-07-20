@@ -13,10 +13,6 @@
       Find a new Friend
     </paper-button>
 
-    <template is="dom-if" if="[[loading]]">
-      <paper-progress indeterminate class="blue"></paper-progress>
-    </template>
-
     <template is="dom-if" if="[[username]]">
       <p>Allow me to introduce you to [[username]]! They've been added to your friends List!</p>
     </template>

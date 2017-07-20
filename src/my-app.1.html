@@ -70,12 +70,37 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         overflow: auto;
       }
 
+      #content {
+        background-color: white;
+        @apply --shadow-elevation-3dp;
+      }
+
       app-drawer {
         @apply --shadow-elevation-3dp;
       }
 
+      #smartpanel {
+        width: 35%;
+        background-color: #E9E9E9;
+        overflow: auto;
+      }
+
       #logo {
         width: 175px;
+      }
+
+      #toggleSmartPanel {
+        display: none;
+      }
+
+      @media (max-width: 900px) {
+        #smartpanel {
+          display: none;
+        }
+       
+        #toggleSmartPanel {
+          display: block;
+        }
       }
 
       .drawer-list {
@@ -93,10 +118,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       .drawer-list a.iron-selected {
         color: black;
         font-weight: bold;
-      }
-
-      paper-progress {
-        width : 100%;
       }
     </style>
 
@@ -116,10 +137,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <img id="logo" src="../images/ericsson-logo1.png" preload sizing="cover"/>
           </div>
           <paper-icon-button id="toggleSmartPanel" icon="open-in-new" on-tap="_toggle"></paper-icon-button>
-          
-          <template is="dom-if" if="[[loading]]">
-            <paper-progress class="middle fit" indeterminate bottom-item></paper-progress>
-          </template>
+          <paper-progress class="middle fit" indeterminate bottom-item></paper-progress>
         </app-toolbar>
       </app-header>
 
@@ -136,17 +154,56 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </app-drawer>
         
         <div class="container flex-horizontal">
-          <iron-pages
-            class="flexchild"
-            selected="[[page]]"
-            attr-for-selected="name"
-            fallback-selection="view404"
-            role="main">
-            <my-view1 name="view1"></my-view1>
-            <my-view2 name="view2"></my-view2>
-            <my-view3 name="view3"></my-view3>
-            <my-view404 name="view404"></my-view404>
-          </iron-pages>
+          <div id="content" class="content flexchild">
+            <input type="text">
+            <!-- Fetch an array of users to be shown in the grid -->
+            <iron-ajax auto url="https://demo.vaadin.com/demo-data/1.0/people?count=200" handle-as="json" last-response="{{users}}"></iron-ajax>
+
+            <!-- The array is set as the <vaadin-grid>'s "items" property -->
+            <vaadin-grid id="grid" aria-label="Basic Binding Example" items="[[users.result]]">
+
+              <vaadin-grid-column width="50px" flex-grow="0">
+                <template class="header">#</template>
+                <template>[[index]]</template>
+                <!-- If necessary, the footer could be set using <template class="footer"> -->
+              </vaadin-grid-column>
+
+              <vaadin-grid-column>
+                <template class="header">First Name</template>
+                <template>[[item.firstName]]</template>
+              </vaadin-grid-column>
+
+              <vaadin-grid-column>
+                <template class="header">Last Name</template>
+                <template>[[item.lastName]]</template>
+              </vaadin-grid-column>
+
+              <vaadin-grid-column width="150px">
+                <template class="header">Address</template>
+                <template>
+                  <p style="white-space: normal">[[item.address.street]], [[item.address.city]]</p>
+                </template>
+              </vaadin-grid-column>
+
+            </vaadin-grid>
+
+          </div>
+          
+          <div id="smartpanel">
+            <template is="dom-if" if="[[loading]]">
+              <paper-progress indeterminate class="blue"></paper-progress>
+            </template>
+            <iron-pages
+              selected="[[page]]"
+              attr-for-selected="name"
+              fallback-selection="view404"
+              role="main">
+              <my-view1 name="view1"></my-view1>
+              <my-view2 name="view2"></my-view2>
+              <my-view3 name="view3"></my-view3>
+              <my-view404 name="view404"></my-view404>
+            </iron-pages>
+          </div>
         </div>
 
       </app-drawer-layout>
@@ -191,6 +248,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         // Get root pattern for app-route, for more info about `rootPath` see:
         // https://www.polymer-project.org/2.0/docs/upgrade#urls-in-templates
         this.rootPattern = ( new URL( this.rootPath ) ).pathname;
+      }
+
+      ready( ) {
+        super.ready( );   
+        window.addEventListener( 'resize', ( ) => {
+          this._sizeContent( );
+        } );
+      }
+
+      connectedCallback( ) {
+        super.connectedCallback( );
+        this._sizeContent( );
+      }
+
+      _sizeContent( ) {
+        this.$.content.style.height,
+        this.$.smartpanel.style.height = ( window.innerHeight - 64 ) + "px";
+        this.$.grid.style.height       = ( window.innerHeight - 89 ) + "px";
       }
 
       _toggle( ) {

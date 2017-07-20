@@ -5,9 +5,9 @@
     loading  : false,
     friends  : [ ],
     username : ""
-  };
+  },
 
-  const reducer = ( state, action ) => {
+  reducer = ( state, action ) => {
    
     switch( action.type ) {
       case "ADD_FRIEND" :
@@ -31,16 +31,16 @@
       default : 
         return initialState;
     }
-  };
+  },
 
-  const store      = Redux.createStore( 
+  store      = Redux.createStore( 
     reducer,
     Redux.applyMiddleware( ReduxThunk.default ) 
-  );
-  
-  const ReduxMixin = PolymerRedux( store );
+  ),
 
-  const AsyncActionsMixin = Parent => class AsyncActionsMixin extends ReduxMixin( Parent ) {
+  ReduxMixin        = PolymerRedux( store ),
+  
+  AsyncActionsMixin = Parent => class AsyncActionsMixin extends ReduxMixin( Parent ) {
     static get actions( ) {
       return {
         signupWithTimeout : ( ) => {
@@ -65,5 +65,4 @@
       }
     }
   };
-
 </script>
