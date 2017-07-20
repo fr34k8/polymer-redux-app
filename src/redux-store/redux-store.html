@@ -55,8 +55,9 @@
               let username = json.results[0].name.first;
               dispatch( { type : 'SIGN_UP_COMPLETED', username : username } );
               dispatch( { type : 'ADD_FRIEND', friend : {
-                name  : username,
-                image : json.results[0].picture.thumbnail
+                name   : username,
+                image  : json.results[0].picture.thumbnail,
+                person : json.results[0]
               } } );
             } );
 
