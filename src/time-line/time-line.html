@@ -1,34 +1,9 @@
 <!-- import polymer-element -->
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../../bower_components/iron-list/iron-list.html">
 
 <dom-module id="time-line">
   <template>
-    <style>
-      :host {
-        height: 100vh;
-        display: flex;
-        flex-direction: column;
-      }
-
-      iron-list {
-        flex: 1 1 auto;
-        height: 100vh;
-      }
-
-      .item {
-        padding: 10px;
-        border-bottom: 1px solid #ccc;
-      }
-    </style>
-    <iron-list id="il" items="[[timeline]]" as="day">
-      <template>
-        <div class="item">
-          [[day.when]] ([[day.events.length]] events)
-        </div>
-      </template>
-    </iron-list>
-    <!--<ul>
+    <ul>
       <template is="dom-repeat" items="[[timeline]]" as="day">
         <li>
           <h4>[[day.when]] ([[day.events.length]] events)</h4>
@@ -39,7 +14,7 @@
           </ul>
         </li>
       </template>
-    </ul>-->
+    </ul>
   </template>
 
   <script>
@@ -81,7 +56,7 @@
           return c - d;
         } );
 
-        this.$.il.fire( 'resize' );
+        console.log( this.timeline );
       }
 
     }
