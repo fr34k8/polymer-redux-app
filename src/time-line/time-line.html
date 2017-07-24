@@ -1,0 +1,91 @@
+<!-- import polymer-element -->
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-list/iron-list.html">
+
+<dom-module id="time-line">
+  <template>
+    <style>
+      :host {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      iron-list {
+        flex: 1 1 auto;
+        height: 100vh;
+      }
+
+      .item {
+        padding: 10px;
+        border-bottom: 1px solid #ccc;
+      }
+    </style>
+    <iron-list id="il" items="[[timeline]]" as="day">
+      <template>
+        <div class="item">
+          [[day.when]] ([[day.events.length]] events)
+        </div>
+      </template>
+    </iron-list>
+    <!--<ul>
+      <template is="dom-repeat" items="[[timeline]]" as="day">
+        <li>
+          <h4>[[day.when]] ([[day.events.length]] events)</h4>
+          <ul>
+            <template is="dom-repeat" items="[[day.events]]" as="event">
+              <li>[[event.who]], [[event.when]] [[event.what]]</li>
+            </template>
+          </ul>
+        </li>
+      </template>
+    </ul>-->
+  </template>
+
+  <script>
+    class TimeLine extends Polymer.Element {
+      static get is( ) { return "time-line"; }
+
+      static get properties( ) {
+        return {
+          history : {
+            type  : Array
+          }
+        };
+      }
+
+      constructor( ) {
+        super( );
+      }
+
+      ready( ) {
+        super.ready( );
+        this.timeline = [ ];
+
+        this.history.map( ( event ) => {
+          let it = this.timeline.filter( function( obj ) {
+            return obj.when === event.when;
+          } )[ 0 ];
+
+          if( it ) {
+            it.events.push( event );
+          } else {
+            this.timeline.push( { when : event.when, events : [ event ]  } );
+          }
+          
+        } );
+
+        this.timeline.sort( ( a, b ) => {
+          var c = new Date( a.when );
+          var d = new Date( b.when );
+          return c - d;
+        } );
+
+        this.$.il.fire( 'resize' );
+      }
+
+    }
+
+    customElements.define( TimeLine.is, TimeLine );
+  </script>
+</dom-module>
