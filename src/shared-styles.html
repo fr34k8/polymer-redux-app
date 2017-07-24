@@ -18,6 +18,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       :host {
         --pri-color : #001f52;
         --secondary-color : #0D82B7;
+        --primary-text-color : #001f52;
       }
 
       .flex-horizontal {
@@ -33,7 +34,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         @apply --shadow-elevation-3dp;
       }
 
-      #smartpanel {
+      .smart-panel {
         width: 35%;
         background-color: #E9E9E9;
         overflow: auto;
@@ -57,6 +58,39 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         width: 100%;
         margin-bottom: 10px;
       }
+
+      paper-tabs {
+        --paper-tabs-selection-bar-color: var(--pri-color);
+      }
+
+      paper-tab {
+        --paper-tab-ink : var(--pri-color);
+      }
+
+      .flex-center-justified {
+        @apply --layout-horizontal;
+        @apply --layout-center-justified;
+      }
+
+      .card {
+        background-color: white;
+        @apply --shadow-elevation-2dp;
+        padding: 1em;
+        margin: 10px;
+      }
+
+      .filter-header {
+        font-weight: bold;
+        font-size: 12pt;
+        border: 0px;
+        padding: 10px;
+      }
+
+      [id^="vaading-grid-cell-content"]:hover {
+        cursor: pointer !important;
+        cursor: hand;
+      }
+
     </style>
   </template>
 </dom-module>

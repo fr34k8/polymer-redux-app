@@ -10,18 +10,136 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="./redux-store/redux-store.html">
+<link rel="import" href="../bower_components/vaadin-split-layout/vaadin-split-layout.html">
 <link rel="import" href="./friends/friend-list.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/vaadin-grid/vaadin-grid.html">
+<link rel="import" href="../bower_components/vaadin-grid/vaadin-grid-sorter.html">
+<link rel="import" href="../bower_components/vaadin-grid/vaadin-grid-filter.html">
+<link rel="import" href="./shared-styles.html">
+<link rel="import" href="./friends/friend-signup.html">
 
 <dom-module id="my-view2">
   <template>
-    <friend-list></friend-list>
+    <style include="shared-styles">
+      :host {
+        display: block;
+      }
+      
+      iron-pages {
+        padding: .5em;
+      }
+
+      #smartpanel {
+        width: 35% !important;
+      }
+
+      vaadin-grid {
+        border: 0px;
+      }
+    </style>
+    <vaadin-split-layout id="layout">
+      <div>
+        <app-toolbar>
+          <div main-title>Friends List</div>
+          <friend-signup></friend-signup>
+        </app-toolbar>
+        
+        <vaadin-grid 
+          aria-label="Selection using Active Item Example" 
+          id="grid" 
+          items="[[friends]]"
+          active-item="{{activeItem}}" 
+          size="200">
+          <!--<vaadin-grid-selection-column auto-select>
+          </vaadin-grid-selection-column>-->
+
+          <!--<vaadin-grid-column width="50px" flex-grow="0">
+            <template class="header">
+              <vaadin-grid-sorter path="id">ID</vaadin-grid-sorter>
+            </template>
+            <template>[[index]]</template>
+          </vaadin-grid-column>-->
+
+          <vaadin-grid-column>
+            <template class="header">
+              <vaadin-grid-sorter path="person.name.first">
+                <vaadin-grid-filter aria-label="Fist Name" path="person.name.first" value="[[_filterFirstName]]">
+                  <input slot="filter" placeholder="First Name" value="{{_filterFirstName::input}}" focus-target>
+                </vaadin-grid-filter>
+              </vaadin-grid-sorter>              
+            </template>
+            <template>[[item.person.name.first]]</template>
+          </vaadin-grid-column>
+
+          <vaadin-grid-column>
+            <template class="header">
+              <vaadin-grid-sorter path="person.name.last">Last Name</vaadin-grid-sorter>
+            </template>
+            <template>[[item.person.name.last]]</template>
+          </vaadin-grid-column>
+
+        </vaadin-grid>
+      </div>
+      <div id="smartpanel" style="max-width:40%;min-width:350px;width:350px;">
+        <paper-tabs selected="{{selected}}">
+          <paper-tab>Tab 1</paper-tab>
+          <paper-tab>Tab 2</paper-tab>
+        </paper-tabs>
+
+        <iron-pages selected="{{selected}}">
+          <div>
+            
+          </div>
+          <div>
+            <friend-list></friend-list>
+          </div>
+        </iron-pages>
+      </div>
+    </vaadin-split-layout>
   </template>
 
   <script>
-    class MyView2 extends Polymer.Element {
-      static get is() { return 'my-view2'; }
+    class MyView2 extends ReduxMixin( Polymer.Element ) {
+      static get is( ) { return 'my-view2'; }
+
+      static get properties( ) {
+        return {
+          friends     : {
+            type      : Array,
+            statePath : 'friends' //polymer-redux association to state
+          },
+          
+          activeItem: {
+            observer: '_activeItemChanged'
+          }
+        }
+      }
+
+      ready( ) {
+        super.ready( );   
+        this.selected = 0;
+        window.addEventListener( 'resize', ( ) => {
+          this._sizeContent( );
+        } );
+      }
+
+      connectedCallback( ) {
+        super.connectedCallback( );
+        this._sizeContent( );
+      }
+
+      _activeItemChanged( item ) {
+        this.$.grid.selectedItems = item ? [item] : [ ];
+        console.log( item );
+      }
+
+      _sizeContent( ) {
+        this.$.layout.style.height = ( window.innerHeight - 64 ) + "px";
+        this.$.grid.style.height   = ( window.innerHeight - 128 ) + "px";
+      }
     }
 
-    window.customElements.define(MyView2.is, MyView2);
+    window.customElements.define( MyView2.is, MyView2 );
   </script>
 </dom-module>
