@@ -1,18 +1,58 @@
 <!-- import polymer-element -->
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
 
 <dom-module id="time-line">
   <template>
     <style>
+      ul {
+        list-style-type: none;
+        padding: 0px;
+        margin-left: 1em;
+        margin-right: 1em;
+      }
+
       h4 {
-        text-align: center;
+        margin: 0px;
+      }
+
+      li {
+        border: solid 1px #E8E8E8;
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 5px;
+      }
+
+      li:nth-child(odd) {
+        background-color: #E9E9E9;
+      }
+
+      .flex-horizontal {
+        @apply --layout-horizontal;
+      }
+
+      .flexchild {
+        @apply --layout-flex;
+      }
+
+      hr {
+        margin: 11px;
       }
     </style>
     <template is="dom-repeat" items="[[timeline]]" as="day">
-      <h4>[[day.when]] ([[day.events.length]] events)</h4>
+      <div class="container flex-horizontal">
+        <div class="flexchild"><hr/></div>
+        <div>[[day.when]] ([[day.events.length]] events)</div>
+        <div class="flexchild"><hr/></div>
+      </div>
+      
+      
       <ul>
         <template is="dom-repeat" items="[[day.events]]" as="event">
-          <li>[[event.who]], [[event.when]] [[event.what]]</li>
+          <li>
+            <h4>[[event.who]] ([[event.when]])</h4>
+            [[event.what]]
+          </li>
         </template>
       </ul>
     </template>
