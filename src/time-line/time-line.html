@@ -24,7 +24,7 @@
       }
 
       li:nth-child(odd) {
-        background-color: #E9E9E9;
+        background-color: #F1F1F1;
       }
 
       .flex-horizontal {
@@ -37,6 +37,13 @@
 
       hr {
         margin: 11px;
+        border: double 1px#E9E9E9;
+      }
+
+      .timestamp {
+        font-size : 80%;
+        color: #C0C0C0;
+        font-weight: normal; 
       }
     </style>
     <template is="dom-repeat" items="[[timeline]]" as="day">
@@ -50,7 +57,7 @@
       <ul>
         <template is="dom-repeat" items="[[day.events]]" as="event">
           <li>
-            <h4>[[event.who]] ([[event.when]])</h4>
+            <h4>[[event.who]]  <span class="timestamp">[[event.when]]</span></h4>
             [[event.what]]
           </li>
         </template>
@@ -79,14 +86,26 @@
         this.timeline = [ ];
 
         this.history.map( ( event ) => {
+          let date = new Date( event.when ),
+              dt   = date.toLocaleDateString( ),
+              time = date.toLocaleTimeString( );
+
           let it = this.timeline.filter( function( obj ) {
-            return obj.when === event.when;
+            let odt = new Date( obj.when ).toLocaleDateString( );
+            
+            return odt === dt;
           } )[ 0 ];
 
+          let evnt = { 
+            who  : event.who,
+            what : event.what,
+            when : time
+          };
+
           if( it ) {
-            it.events.push( event );
+            it.events.push( evnt );
           } else {
-            this.timeline.push( { when : event.when, events : [ event ]  } );
+            this.timeline.push( { when : dt, events : [ evnt ]  } );
           }
           
         } );
@@ -94,7 +113,7 @@
         this.timeline.sort( ( a, b ) => {
           var c = new Date( a.when );
           var d = new Date( b.when );
-          return c - d;
+          return d - c;
         } );
 
         console.log( this.timeline );
