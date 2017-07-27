@@ -13,18 +13,19 @@
       }
 
       h4 {
-        margin: 0px;
+        margin        : 0px;
       }
 
       li {
-        border: solid 1px #E8E8E8;
-        padding: 10px;
-        border-radius: 5px;
-        margin-bottom: 5px;
+        border        : solid 1px #E8E8E8;
+        padding       : 10px;
+        margin-left   : 1em;
+        border-radius : 5px;
+        margin-bottom : 5px;
       }
 
       li:nth-child(odd) {
-        background-color: #F1F1F1;
+        /* background-color: #F1F1F1; */
       }
 
       .flex-horizontal {
@@ -45,23 +46,48 @@
         color: #C0C0C0;
         font-weight: normal; 
       }
+
+      .circle {
+        width: 30px;
+        height: 30px;
+        background: #001f52;
+        -moz-border-radius: 50px;
+        -webkit-border-radius: 50px;
+        border-radius: 50px;
+      }
+
+      .verthr {
+        margin-left: 13px;
+        border-right: dashed 3px #001f52;
+      }
+
+      .horzhr {
+        margin-top: 11px;
+        margin-left: 10px;
+        border-top: solid 2px #C0C0C0;
+      }
     </style>
     <template is="dom-repeat" items="[[timeline]]" as="day">
       <div class="container flex-horizontal">
-        <div class="flexchild"><hr/></div>
-        <div>[[day.when]] ([[day.events.length]] events)</div>
-        <div class="flexchild"><hr/></div>
+        <div class="circle"></div>
+        <!-- <div class="flexchild horzhr"></div> -->
+        <div style="margin-left: 10px;color:dimgrey;">[[day.when]] ([[day.events.length]] events)</div>
+        <div class="flexchild horzhr"></div>
       </div>
       
-      
-      <ul>
-        <template is="dom-repeat" items="[[day.events]]" as="event">
-          <li>
-            <h4>[[event.who]]  <span class="timestamp">[[event.when]]</span></h4>
-            [[event.what]]
-          </li>
-        </template>
-      </ul>
+      <div class="container flex-horizontal">
+        <div class="verthr"></div>
+        <div class="flexchild">
+          <ul>
+            <template is="dom-repeat" items="[[day.events]]" as="event">
+              <li>
+                <h4>[[event.who]]  <span class="timestamp">[[event.when]]</span></h4>
+                [[event.what]]
+              </li>
+            </template>
+          </ul>
+        </div>
+      </div>
     </template>
   </template>
 
